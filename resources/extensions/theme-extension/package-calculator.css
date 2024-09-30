@@ -1,0 +1,173 @@
+package-calculator {
+  --_background-color: var(--package-calculator--background-color, #e2e2e2);
+  --_color: var(--package-calculator--color, #1a1a1a);
+  --_muted-color: var(--package-calculator--muted-color, #666);
+  --_radius: var(--package-calculator--radius, 0.5rem);
+  --_padding: var(--package-calculator--padding, 1.6rem 1.2rem);
+  --_border-width: var(--package-calculator--border-width, 1px);
+  --_border-color: var(--package-calculator--border-color, #f4f4f4);
+  --_border-color--error: #b91c1c;
+  --_background-color--error: #fecaca;
+  --_spacing: 1.6rem;
+
+  display: block;
+
+  background-color: var(--_background-color);
+  color: var(--_color);
+  border-radius: var(--_radius);
+  padding: var(--_padding);
+
+  fieldset {
+    all: unset;
+
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--_spacing);
+
+    label {
+      font-weight: 700;
+      margin-bottom: var(--_spacing);
+    }
+
+    input {
+      all: unset;
+      display: block;
+      border: 1px solid var(--_border-color);
+      border-radius: var(--_radius);
+      background-color: #fff;
+      padding: 0.8rem 1.2rem;
+      flex: 1 1 100%;
+    }
+  }
+
+  output {
+    display: flex;
+    flex-direction: column;
+    transition: max-height 3s ease-out;
+  }
+
+  small {
+    color: var(--_muted-color);
+  }
+
+  strong {
+    margin-block: 1.6rem 0.4rem;
+  }
+
+  form.product-form {
+    row-gap: 0;
+  }
+
+  .package-calculator--icon {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+  }
+
+  .package-calculator__input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.6rem;
+  }
+
+  .btn {
+    margin-top: var(--_spacing);
+  }
+
+  [data-loading-spinner] {
+    position: absolute;
+    font-size: 2.8rem;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    animation: spin 1s linear infinite;
+    translate: -50% -50%;
+    transition: opacity 0.3s ease-out;
+  }
+
+  [data-loading="hidden"] {
+    opacity: 1;
+    transition: opacity 0.3s ease-out;
+  }
+
+  &[data-bordered] {
+    border: var(--_border-width) solid var(--_border-color);
+  }
+
+  &[data-elevated] {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.025);
+  }
+
+  &[aria-expanded="false"] output {
+    max-height: 0;
+    overflow: hidden;
+  }
+
+  &[aria-expanded="true"] output {
+    max-height: 100vh;
+    overflow: auto;
+  }
+
+  &[aria-busy="false"] {
+    [data-loading-spinner] {
+      opacity: 0;
+    }
+  }
+
+  &[aria-busy="true"] {
+    [data-loading="hidden"] {
+      opacity: 0;
+      transition-timing-function: ease-in;
+    }
+
+    [data-loading-spinner] {
+      opacity: 1;
+      transition-timing-function: ease-in;
+    }
+  }
+
+  &[aria-invalid="true"] {
+    border: 1px solid var(--_border-color--error);
+
+    fieldset input {
+      border-color: var(--_border-color--error);
+      background-color: var(--_background-color--error);
+    }
+  }
+}
+
+package-calculator .package-calculator__validation-error {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1rem;
+  border: 1px solid var(--_border-color--error);
+  padding: 1rem 3.2rem;
+  background: var(--_background-color--error);
+  color: var(--_border-color--error);
+  border-radius: 1.2rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.025);
+  animation: pop-up 0.3s forwards ease-out;
+}
+
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
+
+@keyframes pop-up {
+  0% {
+    opacity: 0;
+    transform: translateY(3.2rem);
+    scale: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    scale: 1;
+  }
+}

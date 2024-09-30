@@ -1,0 +1,195 @@
+{
+  "Blocks": {
+    "PackageCalculator": {
+      "Name": "Verpakking rekenmachine",
+      "Settings": {
+        "TotalLabel": {
+          "Label": "Totaal label",
+          "Info": "Het label dat wordt weergegeven naast het totaalbedrag.",
+          "Placeholder": "Totaal"
+        },
+        "CuttingLossNotice": {
+          "Label": "Snijverlies melding",
+          "Info": "Een melding die wordt weergegeven om de gebruiker te informeren over snijverlies.",
+          "Placeholder": "Let op: het systeem vult het snijverlies in als vervanging voor '%%'."
+        },
+        "SelectedLabel": {
+          "Label": "Geselecteerd label",
+          "Info": "Gebruik %1% voor het aantal pakken uit de berekening. Gebruik %2% voor het ingevoerde aantal m².",
+          "Placeholder": "%1% pak(ken) voor %2% m²"
+        },
+        "AddToCart": {
+          "Label": "Toevoegen aan winkelwagen label",
+          "Info": "Het label dat wordt weergegeven op de knop om het product toe te voegen aan de winkelwagen.",
+          "Placeholder": "Toevoegen aan winkelwagen"
+        }
+      }
+    },
+    "SurfacePrice": {
+      "Name": "Prijs per oppervlakte",
+      "Settings": {
+        "ShowContents": {
+          "Label": "Pakketinhoud tonen",
+          "Info": "Toon de inhoud van een pakket naast de prijs."
+        },
+        "ShowSavings": {
+          "Label": "Besparing tonen",
+          "Info": "Toon de besparing die de klant maakt bij aankoop van een pakket."
+        }
+      }
+    }
+  },
+  "Settings": {
+    "Title": {
+      "Label": "Titel",
+      "Info": "De titel van het blok.",
+      "Placeholder": "Dit is een titel..."
+    },
+    "Label": {
+      "Label": "Label",
+      "Info": "Een label is een korte tekst met relevante informatie over een element.",
+      "Placeholder": "Dit is een label..."
+    },
+    "Url": {
+      "Label": "URL",
+      "Info": "Een link of verwijzing naar een andere pagina, website of browser actie.",
+      "Placeholder": "https://www.example.com"
+    },
+    "Placeholder": {
+      "Label": "Plaatsaanduiding",
+      "Info": "Een voorbeeldtekst die wordt weergegeven in een invoerveld totdat de gebruiker een waarde invoert.",
+      "Placeholder": "Dit is een plaatsaanduiding..."
+    },
+    "BorderRadius": {
+      "Label": "Hoekafrondingen",
+      "Info": "De hoekafrondingen van een element.",
+      "Placeholder": "5px"
+    },
+    "BorderWidth": {
+      "Label": "Randdikte",
+      "Info": "De dikte van de rand van een element."
+    },
+    "BorderColor": {
+      "Label": "Randkleur",
+      "Info": "De kleur van de rand van een element."
+    },
+    "ExtraStyles": {
+      "Label": "Extra stijlregels",
+      "Info": "Extra CSS stijlregels die worden toegepast op het element. de tekens %% worden vervangen met het unieke ID, of de classname van het blok."
+    },
+    "AnimationType": {
+      "Label": "Animatie",
+      "Info": "Het type animatie dat wordt gebruikt bij laden of interactie van een element.",
+      "Options": {
+        "None": "Geen",
+        "Scale": "Schalen",
+        "Colors": "Kleuren"
+      }
+    },
+    "Icon": {
+      "Label": "Icoon",
+      "Info": "Een visuele representatie van een actie, een object of een concept.",
+      "Position": {
+        "Label": "Icoonpositie",
+        "Info": "De positie van het icoon ten opzichte van de tekst.",
+        "Options": {
+          "Left": "Links",
+          "Right": "Rechts"
+        }
+      }
+    },
+    "Paddings": {
+      "Block": {
+        "Label": "Blokvulling",
+        "Info": "De verticale ruimte tussen de rand van een element en de inhoud ervan."
+      },
+      "Inline": {
+        "Label": "Inhoudvulling",
+        "Info": "De horizontale ruimte tussen de rand van een element en de inhoud ervan."
+      }
+    },
+    "Colors": {
+      "Background": {
+        "Label": "Achtergrondkleur",
+        "Info": "De kleur van de achtergrond van een element.",
+        "Placeholder": "#000000"
+      },
+      "Text": {
+        "Label": "Tekstkleur",
+        "Info": "De kleur van de tekst van een element.",
+        "Placeholder": "#FFFFFF"
+      },
+      "BackgroundHover": {
+        "Label": "Achtergrondkleur (hover)",
+        "Info": "De kleur van de achtergrond van een element wanneer de muis erover beweegt.",
+        "Placeholder": "#A1A1A1"
+      },
+      "TextHover": {
+        "Label": "Tekstkleur (hover)",
+        "Info": "De kleur van de tekst van een element wanneer de muis erover beweegt.",
+        "Placeholder": "#F4F4F4"
+      },
+      "TextMuted": {
+        "Label": "Tekstkleur (muted)",
+        "Info": "De kleur van de tekst van een element om minder indruk te maken.",
+        "Placeholder": "#C7C7C7"
+      },
+      "BorderColor": {
+        "Label": "Randkleur",
+        "Info": "De kleur van de rand van een element."
+      }
+    },
+    "Fonts": {
+      "FontWeight": {
+        "Label": "Letterdikte",
+        "Info": "De dikte van de tekst van een element."
+      },
+      "FontWeightStrong": {
+        "Label": "Letterdikte (sterk)",
+        "Info": "De dikte van de tekst van een element wanneer deze wordt gemarkeerd."
+      },
+      "FontSize": {
+        "Label": "Lettergrootte",
+        "Info": "De grootte van de tekst van een element."
+      }
+    },
+    "ShowCurrencySign": {
+      "Label": "Valuta tonen",
+      "Info": "Toon het valutasymbool voor het bedrag."
+    },
+    "AddBorder": {
+      "Label": "Rand toevoegen",
+      "Info": "Voeg een rand toe aan het element."
+    },
+    "AddShadows": {
+      "Label": "Schaduw toevoegen",
+      "Info": "Voeg een schaduw toe aan het element."
+    }
+  },
+  "Headings": {
+    "General": {
+      "Content": "Algemeen",
+      "Info": "Algemene instellingen voor dit blok."
+    },
+    "Colors": {
+      "Content": "Kleuren",
+      "Info": "Kleurinstellingen voor dit blok."
+    },
+    "Layout": {
+      "Content": "Layout",
+      "Info": "Layout instellingen voor dit blok."
+    },
+    "Fonts": {
+      "Content": "Lettertypes",
+      "Info": "Lettertype instellingen voor dit blok."
+    },
+    "Other": {
+      "Content": "Overige",
+      "Info": "Overige instellingen voor dit blok."
+    }
+  },
+  "Syntax": {
+    "Yes": "Ja",
+    "No": "Nee"
+  }
+}

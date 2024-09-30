@@ -1,0 +1,429 @@
+{%- comment -%}
+  This block registers the specific block that will be used to calculate the package price.
+
+  ## Inner workings
+{%- endcomment -%}
+{%- liquid
+  assign product = product
+  assign settings = block.settings
+  assign block_id = block.id
+
+  assign section_id = 'hc_custom_' | append: block_id | append: '_section'
+  assign alert_id = 'hc_custom_' | append: block_id | append: '_alert'
+  assign input_id = 'hc_custom_' | append: block_id | append: '_input'
+  assign product_form_id = 'product-form-' | append: product.id | append: '-' | append: section_id
+
+  # === Common ===
+  assign label = settings.label
+  assign placeholder = settings.placeholder
+  assign selected_label = settings.selected_label
+  assign cutting_loss_notice = settings.cutting_loss_notice
+  assign total_label = settings.total_label
+  assign show_currency_sign = settings.show_currency_sign
+  assign add_border = settings.add_border
+  assign add_elevation = settings.add_elevation
+  assign button_label_atc = settings.button_label_atc
+
+  # === Styles ===
+  assign background_color = settings.background_color
+  assign text_color = settings.text_color
+  assign text_color_muted = settings.text_color_muted
+
+  assign border_radius = settings.border_radius
+  assign border_color = settings.border_color
+  assign border_width = settings.border_width
+  assign padding_inline = settings.padding_inline
+  assign padding_block = settings.padding_block
+
+  assign show_label = false
+  assign cutoff_percentage = 10
+  assign square_meters_per_package = 1
+-%}
+
+{%- comment -%}Block specific logic{%- endcomment -%}
+{%- liquid
+  # LOGIC: Only show if label is set
+  unless label == blank
+    assign show_label = true
+  endunless
+
+  # LOGIC: Use the product cutoff percentage if available
+  if product.metafields.custom.cutoff_margin != blank
+    assign cutoff_percentage = product.metafields.custom.cutoff_margin
+  endif
+
+  # LOGIC: Use the product square meters per package if available
+  if product.metafields.custom.square_meters_per_package != blank
+    assign square_meters_per_package = product.metafields.custom.square_meters_per_package
+  endif
+
+  # LOGIC: Calculate the price_per_square_meter using the product price
+  assign price_per_square_meter = product.price | divided_by: square_meters_per_package
+-%}
+
+{%- capture label_html -%}
+      <label for="{{ input_id }}">{{ label }}</label>
+  {%- endcapture -%}
+
+{%- capture selected_packs_html -%}
+  {% render 'package-calculator.span-target', target: 'selected-packs' %}
+  {%- endcapture -%}
+
+{%- capture selected_square_meters_html -%}
+  {% render 'package-calculator.span-target', target: 'entered-surface-area' %}
+  {%- endcapture -%}
+
+{%- capture cutoff_margin_html -%}
+  {% assign priv_cutoff_percentage = cutoff_percentage | append: '%' %}
+  {% render 'package-calculator.span-target', target: 'cutoff-margin', value: priv_cutoff_percentage %}
+  {%- endcapture -%}
+
+{%- capture selected_label_html -%}
+  {{ selected_label | replace: '%1%', selected_packs_html | replace: '%2%', selected_square_meters_html }}
+  {%- endcapture -%}
+
+{%- capture cutting_loss_notice_html -%}
+  {{ cutting_loss_notice | replace: '%%', cutoff_margin_html }}
+  {%- endcapture -%}
+
+{%- capture total_price_html -%}
+  {% if show_currency_sign == "yes" %}
+    {% assign priv_start_total = 0 | money %}
+    {% assign priv_package_price = product.price | money %}
+  {% else %}
+    {% assign priv_start_total = 0 | money | replace: '€', '' | strip %}
+    {% assign priv_package_price = product.price | money | replace: '€', '' | strip %}
+  {% endif %}
+  
+  {% render 'package-calculator.span-target', target: 'totals', value: priv_start_total %}
+  <small>({{ priv_package_price }} per pak)</small>
+  {%- endcapture -%}
+
+{%- comment -%} Styling {%- endcomment -%}
+<style id="{{ block_id }}_styles">
+  package-calculator {
+    --package-calculator--color: {{ text_color | color_to_hsl }};
+    --package-calculator--muted-color: {{ text_color_muted | color_to_hsl }};
+    --package-calculator--background-color: {{ background_color | color_to_hsl }};
+    --package-calculator--padding: {{ padding_block }}px {{ padding_inline }}px;
+    --package-calculator--border-radius: {{ border_radius }}px;
+    --package-calculator--border-color: {{ border_color }};
+    --package-calculator--border-width: {{ border_width }}px;
+  }
+
+  package-calculator:not(:defined) {
+    display: none;
+  }
+</style>
+
+<noscript>
+  <style>
+    package-calculator {
+      display: none;
+    }
+  </style>
+</noscript>
+
+<package-calculator
+  data-product-id="{{ product.first_available_variant.id }}"
+  data-cutoff-percentage="{{ cutoff_percentage }}"
+  data-square-meters-per-package="{{ square_meters_per_package }}"
+  data-price-per-square-meter="{{ price_per_square_meter }}"
+  data-show-currency="{{ show_currency_sign }}"
+  data-product-price="{{ product.price }}"
+  {% unless product.available %}
+    aria-disabled="true"
+  {% endunless %}
+  {% unless add_border == 'no' %}
+    data-bordered
+  {% endunless %}
+  {% unless add_elevation == 'no' %}
+    data-elevated
+  {% endunless %}
+
+  aria-busy="false"
+  aria-expanded="false"
+  aria-invalid="false"
+>
+  {% form 'product',
+    product,
+    id: product_form_id,
+    class: 'product-form',
+    novalidate: 'novalidate',
+    data-type: 'add-to-cart-form'
+  %}
+    <fieldset class="package-calculator__field">
+      {%- if show_label -%}
+        {{- label_html -}}
+      {%- endif -%}
+
+      <div class="package-calculator__input-wrapper">
+        <input
+          class="package-calculator__input"
+          type="number"
+          min="0"
+          id="{{ input_id }}"
+          name="square_meters"
+          placeholder="{{ placeholder }}"
+          required
+        >
+        <span>m<sup>2</sup></span>
+      </div>
+    </fieldset>
+
+    {% render 'package-calculator.input-hidden', name: 'cutoff_loss', value: 0 %}
+    {% render 'package-calculator.input-hidden', name: 'square_meters_total', value: 0 %}
+
+    {% render 'package-calculator.input-hidden',
+      name: 'quantity',
+      min: 1,
+      value: 1,
+      target: 'quantity',
+      target_attribute: 'value'
+    %}
+
+    <output>
+      <span>{{- selected_label_html -}}</span>
+      <small>{{- cutting_loss_notice_html -}}</small>
+      <strong>{{- total_label -}}</strong>
+      <p>{{- total_price_html -}}</p>
+    </output>
+
+    <button type="submit" class="btn btn--solid package-calculator--add_to_cart">
+      <span data-loading="hidden">{{ button_label_atc }}</span>
+
+      {% render 'package-calculator.loading-icon' %}
+    </button>
+
+    <template data-errors>
+      <div
+        role="alert"
+        class="package-calculator__validation-error"
+        data-error="generic"
+      >
+        <p>{{ 'Errors.Generic' | t }}</p>
+      </div>
+
+      <div
+        role="alert"
+        class="package-calculator__validation-error"
+        data-error="missing-fields"
+      >
+        <p>{{ 'Errors.MissingFields' | t }}</p>
+      </div>
+    </template>
+  {% endform %}
+</package-calculator>
+
+<script src="{{ 'package-calculator.js' | asset_url }}" async defer></script>
+{{ 'package-calculator.css' | asset_url | stylesheet_tag }}
+
+{% if request.design_mode %}
+  <style>
+    #{{ alert_id }} {
+      padding: 1.6rem;
+      border: 1px solid #dc2626;
+      background-color: #fecaca;
+      color: #991b1b;
+      border-radius: 0.75rem;
+      margin-top: 3.2rem;
+    }
+  </style>
+
+  <p role="alert" id="{{ alert_id }}">Please make sure to remove the add to cart button from the page.</p>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:Blocks.PackageCalculator.Name",
+  "target": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:Headings.General.Content",
+      "info": "t:Headings.General.Info"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:Settings.Label.Label",
+      "default": "Voor welke oppervlakte",
+      "info": "t:Settings.Label.Info",
+      "placeholder": "t:Settings.Label.Placeholder"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "t:Settings.Placeholder.Label",
+      "default": "Aantal m²",
+      "info": "t:Settings.Placeholder.Info",
+      "placeholder": "t:Settings.Placeholder.Placeholder"
+    },
+    {
+      "type": "text",
+      "id": "selected_label",
+      "label": "t:Blocks.PackageCalculator.Settings.SelectedLabel.Label",
+      "default": "%1% pak(ken) voor %2% m²",
+      "info": "t:Blocks.PackageCalculator.Settings.SelectedLabel.Info",
+      "placeholder": "t:Blocks.PackageCalculator.Settings.SelectedLabel.Placeholder"
+    },
+    {
+      "type": "text",
+      "id": "cutting_loss_notice",
+      "label": "t:Blocks.PackageCalculator.Settings.CuttingLossNotice.Label",
+      "default": "Deze calculator houdt rekening met %% snijverlies.",
+      "info": "t:Blocks.PackageCalculator.Settings.CuttingLossNotice.Info",
+      "placeholder": "t:Blocks.PackageCalculator.Settings.CuttingLossNotice.Placeholder"
+    },
+    {
+      "type": "text",
+      "id": "total_label",
+      "label": "t:Blocks.PackageCalculator.Settings.TotalLabel.Label",
+      "default": "Totaalprijs",
+      "info": "t:Blocks.PackageCalculator.Settings.TotalLabel.Info",
+      "placeholder": "t:Blocks.PackageCalculator.Settings.TotalLabel.Placeholder"
+    },
+    {
+      "type": "text",
+      "id": "button_label_atc",
+      "label": "t:Blocks.PackageCalculator.Settings.AddToCart.Label",
+      "default": "Toevoegen aan winkelmand",
+      "info": "t:Blocks.PackageCalculator.Settings.AddToCart.Info",
+      "placeholder": "t:Blocks.PackageCalculator.Settings.AddToCart.Placeholder"
+    },
+    {
+      "type": "header",
+      "content": "t:Headings.Layout.Content",
+      "info": "t:Headings.Layout.Info"
+    },
+    {
+      "type": "select",
+      "id": "add_border",
+      "label": "t:Settings.AddBorder.Label",
+      "options": [
+        {
+          "value": "yes",
+          "label": "t:Syntax.Yes"
+        },
+        {
+          "value": "no",
+          "label": "t:Syntax.No"
+        }
+      ],
+      "default": "no",
+      "info": "t:Settings.AddBorder.Info"
+    },
+    {
+      "type": "select",
+      "id": "add_elevation",
+      "label": "t:Settings.AddShadows.Label",
+      "options": [
+        {
+          "value": "yes",
+          "label": "t:Syntax.Yes"
+        },
+        {
+          "value": "no",
+          "label": "t:Syntax.No"
+        }
+      ],
+      "default": "yes",
+      "info": "t:Settings.AddShadows.Info"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "t:Settings.BorderRadius.Label",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "t:Settings.BorderWidth.Label",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "padding_block",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "t:Settings.Paddings.Block.Label",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_inline",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "t:Settings.Paddings.Inline.Label",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:Headings.Colors.Content",
+      "info": "t:Headings.Colors.Info"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:Settings.Colors.Background.Label",
+      "info": "t:Settings.Colors.Background.Info"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:Settings.Colors.Text.Label",
+      "info": "t:Settings.Colors.Text.Info"
+    },
+    {
+      "type": "color",
+      "id": "text_color_muted",
+      "label": "t:Settings.Colors.TextMuted.Label",
+      "info": "t:Settings.Colors.TextMuted.Info"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "t:Settings.BorderColor.Label",
+      "info": "t:Settings.BorderColor.Info"
+    },
+    {
+      "type": "header",
+      "content": "t:Headings.Other.Content",
+      "info": "t:Headings.Other.Info"
+    },
+    {
+      "type": "select",
+      "id": "show_currency_sign",
+      "label": "t:Settings.ShowCurrencySign.Label",
+      "options": [
+        {
+          "value": "yes",
+          "label": "t:Syntax.Yes"
+        },
+        {
+          "value": "no",
+          "label": "t:Syntax.No"
+        }
+      ],
+      "default": "yes",
+      "info": "t:Settings.ShowCurrencySign.Info"
+    }
+  ]
+}
+{% endschema %}
