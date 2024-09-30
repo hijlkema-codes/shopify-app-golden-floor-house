@@ -1,0 +1,19 @@
+{% liquid
+  assign min = min | default: blank
+  assign value = value | default: min
+%}
+
+<input
+  type="hidden"
+  name="{{ name }}"
+  {% unless min == blank %}
+    min="{{ min }}"
+  {% endunless %}
+  {% unless value == blank %}
+    value="{{ value }}"
+  {% endunless %}
+  data-value-target="{{ target }}"
+  {% unless target_attribute == blank %}
+    data-value-target-attribute="{{ target_attribute }}"
+  {% endunless %}
+>
