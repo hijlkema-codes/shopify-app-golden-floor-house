@@ -26,3 +26,10 @@ extensions/*/build
 # Ignore shopify files created during app dev
 .shopify/*
 .shopify.lock
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/codeStyles/Project.xml
+/.idea/.gitignore
+/.idea/git_toolbox_blame.xml
+/.idea/modules.xml
+/.idea/shopify-app-golden-floor-house.iml
+/.idea/vcs.xml
