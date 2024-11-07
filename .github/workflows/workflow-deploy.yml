@@ -20,7 +20,7 @@ jobs:
             - name: Install Shopify CLI
               run: npm install -g @shopify/cli@latest
             - name: Build
-              run: npm run build
+              run: npm run resources
             - name: Deploy
               env:
                 # Token from the partner Dashboard
