@@ -4,7 +4,6 @@ export const openCartDrawer = () => {
   const cartDrawer = document.querySelector(cartDrawerSelector);
   if (cartDrawer) {
     cartDrawer.update?.();
-    cartDrawer.purchaseHandler?.();
-    cartDrawer.open?.();
+    cartDrawer.show?.();
   }
 };

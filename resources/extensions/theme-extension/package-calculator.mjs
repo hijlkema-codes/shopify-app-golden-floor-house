@@ -85,8 +85,17 @@ class PackageCalculator extends HTMLElement {
 
     // Add to cart logic.
 
+    let sectionsToBundle = [];
+    // Dirty way of doing this, but this is how the theme works
+    document.documentElement.dispatchEvent(new CustomEvent('cart:bundled-sections', { bubbles: true, detail: { sections: sectionsToBundle } }));
+
     setElementLoading(this);
     await addToCart(variantId, quantity);
+    const sections = await fetch(`?sections=${sectionsToBundle.join(',')}`).then(res => res.json());
+
+    const cartJson = await (await fetch(`${theme.routes.cart_url}`, { ...theme.utils.fetchConfig()})).json();
+    cartJson['sections'] = sections
+    theme.pubsub.publish(theme.pubsub.PUB_SUB_EVENTS.cartUpdate, { source: 'product-form', cart: cartJson });
     setElementLoading(this, false);
 
     // Open the cart drawer.

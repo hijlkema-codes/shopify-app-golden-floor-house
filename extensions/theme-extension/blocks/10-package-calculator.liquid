@@ -206,7 +206,7 @@
       <p>{{- total_price_html -}}</p>
     </output>
 
-    <button type="submit" class="btn btn--solid package-calculator--add_to_cart">
+    <button type="submit" class="product-form__submit button button--primary button--fixed w-full">
       <span data-loading="hidden">{{ button_label_atc }}</span>
 
       {% render 'package-calculator.loading-icon' %}
@@ -247,7 +247,14 @@
     }
   </style>
 
-  <p role="alert" id="{{ alert_id }}">Please make sure to remove the add to cart button from the page.</p>
+  <div role="alert" id="{{ alert_id }}">
+    Please make sure to remove the following blocks from the page.
+    <ul>
+      <li>Variant picker</li>
+      <li>Buy buttons</li>
+      <li>Sticky buy button</li>
+    </ul>
+  </div>
 {% endif %}
 
 {% schema %}

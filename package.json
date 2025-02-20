@@ -9,7 +9,7 @@
     "build:shopify": "shopify app build",
     "build:scripts": "node esbuild.config.mjs",
     "build:styles": "node lightningcss.config.mjs",
-    "dev": "shopify app dev",
+    "dev": "shopify app dev --theme 173978288469",
     "info": "shopify app info",
     "generate": "shopify app generate",
     "deploy": "shopify app deploy"
