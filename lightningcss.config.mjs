@@ -5,11 +5,17 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+const targets = {
+  chrome: 100,
+  firefox: 100,
+  safari: 17,
+};
+
 const assetDir = path.join(
   __dirname,
   "resources",
   "extensions",
-  "theme-extension"
+  "theme-extension",
 );
 const files = fs.readdirSync(assetDir).filter((file) => file.endsWith(".css"));
 const entryPoints = files.map((file) => path.join(assetDir, file));
@@ -30,12 +36,7 @@ cssFiles.forEach(({ buffer, file }) => {
     filename,
     code: buffer,
     minify: true,
-    sourcemap: "true",
-    targets: {
-      chrome: 100,
-      firefox: 100,
-      safari: 17,
-    },
+    targets,
   });
 
   fs.writeFileSync(path.join(outputDir, filename), code);
